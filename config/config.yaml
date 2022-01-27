@@ -5,7 +5,6 @@ data:
     Normalize: True
   dataloader:
     dataset: abstract_art_512
-    data_root: './dataset/abstract_art_512/'
     batch_size: 4
     shuffle: True
     num_workers: 8
