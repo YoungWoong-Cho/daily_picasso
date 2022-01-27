@@ -14,7 +14,8 @@ class AbstractArt512(Dataset):
         return len(self.data_list)
 
     def __getitem__(self, idx):
-        sample = Image.open(os.path.join(self.data_root, self.data_list[idx]))
+        data_fp = os.path.join(self.data_root, self.data_list[idx])
+        sample = Image.open(data_fp)
         if self.transform:
             sample = self.transform(sample)
         return sample
@@ -30,12 +31,13 @@ def get_dataloader(config:Dict):
     transform = transforms.Compose(transform_list)
     
     if cfg_loader['dataset'] == 'abstract_art_512':
-        dataloader = DataLoader(dataset=AbstractArt512(data_root=cfg_loader['data_root'],
-                                                        transform=transform),
-                                 batch_size=cfg_loader['batch_size'],
-                                 shuffle=cfg_loader['shuffle'],
-                                 num_workers=cfg_loader['num_workers'],
-                                 drop_last=cfg_loader['drop_last'])
+        data_root = f'dataset/{cfg_loader["dataset"]}'
+        dataloader = DataLoader(dataset=AbstractArt512(data_root=data_root,
+                                                       transform=transform),
+                                batch_size=cfg_loader['batch_size'],
+                                shuffle=cfg_loader['shuffle'],
+                                num_workers=cfg_loader['num_workers'],
+                                drop_last=cfg_loader['drop_last'])
     else:
-        raise Exception('dataset not found.')
+        raise Exception(f'dataset {cfg_loader["dataset"]} not found.')
     return dataloader
